@@ -3,6 +3,9 @@ onload= init;
 
 var objJSON;
 var numeroDeObjetos;
+var totalOSTestada= 0;
+var totalOSComDefeito=0;
+total = 0;
 
 function init(){
     var btn = document.getElementById("gerar");
@@ -84,7 +87,11 @@ function criarTabela(){
 				for(var x=0; x < nPendencias; x++){
 					if(str.localeCompare(objJSON[i].pendencias[x].descricao)== 0){
 						total++;
+						
 					}					
+				}
+				if(total>0){
+					totalOSTestada++;
 				}
 				var text = document.createTextNode(total);
 				cell.appendChild(text);
@@ -98,8 +105,11 @@ function criarTabela(){
 				for(var x=0; x < nPendencias; x++){
 					if(str.localeCompare(objJSON[i].pendencias[x].descricao)== 0){
 						total++;
-					}					
+					}
 				}
+				if(total>0){
+						totalOSComDefeito++;
+					}
 				var text = document.createTextNode(total);
 				cell.appendChild(text);
 				linha.appendChild(cell);
@@ -116,7 +126,11 @@ function criarTabela(){
     
        porcentagemPrioridade();
 	   porcentagemOcorrência();
-	   //gerarPDF();
+	   porcentagemDeOSTestadas();
+	   porcentagemDeOSTestadasComDefeito();
+	   alert(totalOSTestada);
+	   alert(totalOSComDefeito);
+	   
 }
 
 
@@ -302,23 +316,117 @@ function porcentagemOcorrência(){
 
 
 
-/*
-function gerarPDF(){
+
+function porcentagemDeOSTestadas(){
+	var totalOSNaoTestada=numeroDeObjetos-totalOSTestada;
 	
-	var body = document.getElementById("conteudo");
-	html2canvas(conteudo,{
-		onrendered: function(canvas){
-			
-			var img = canvas.toDataURL("image/png");
-			var doc = new jsPDF();
-			doc.addImage(img, 'JPEG',10,50);
-			doc.save("teste.pdf");
-			
-		} 
+	$(document).ready(function() {  
+			   var chart = {      
+				  type: 'pie',     
+				  options3d: {
+					 enabled: true,
+					 alpha: 45,
+					 beta: 0
+				  }
+			   };
+			   var title = {
+				  text: 'Cobertura dos testes'   
+			   };   
+			   var tooltip = {
+				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			   };
+
+			   var plotOptions = {
+				  pie: {
+					  allowPointSelect: true,
+					  cursor: 'pointer',
+					  depth: 35,
+					  dataLabels: {
+						 enabled: true,
+						 format: '{point.name}'
+					  }
+				  }
+			   };   
+			   var series= [{
+					 type: 'pie',
+						name: 'Ocorrência com',
+						data: [
+							['ORDENS DE SERVIÇO TESTADAS',  parseFloat(((totalOSTestada*100)/numeroDeObjetos).toFixed(2))],
+							['ORDENS DE SERVIÇO NÃO TESTADAS',  parseFloat(((totalOSNaoTestada*100)/numeroDeObjetos).toFixed(2))  ],
+							
+						]
+			   }];     
 		
 		
-	});
+			var json = {};   
+			json.chart = chart; 
+			json.title = title;     
+			json.tooltip = tooltip;  
+			json.series = series;
+			json.plotOptions = plotOptions;
+			 $('#campo4').highcharts(json);
 	
-}*/
+		});	
+}
+
+
+
+
+function porcentagemDeOSTestadasComDefeito(){
+	var totalOSSemDefeito =  totalOSTestada - totalOSComDefeito;
+	
+	$(document).ready(function() {  
+			   var chart = {      
+				  type: 'pie',     
+				  options3d: {
+					 enabled: true,
+					 alpha: 45,
+					 beta: 0
+				  }
+			   };
+			   var title = {
+				  text: 'Incidência de Defeitos'   
+			   };   
+			   var tooltip = {
+				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			   };
+
+			   var plotOptions = {
+				  pie: {
+					  allowPointSelect: true,
+					  cursor: 'pointer',
+					  depth: 35,
+					  dataLabels: {
+						 enabled: true,
+						 format: '{point.name}'
+					  }
+				  }
+			   };   
+			   var series= [{
+					 type: 'pie',
+						name: 'Ocorrência com',
+						data: [
+							['COM INCIDÊNCIA DE DEFEITOS',  parseFloat(((totalOSComDefeito*100)/numeroDeObjetos).toFixed(2))],
+							['SEM INCIDÊNCIA DE DEFEITOS',  parseFloat(((totalOSSemDefeito*100)/numeroDeObjetos).toFixed(2))  ],
+							
+						]
+			   }];     
+		
+		
+			var json = {};   
+			json.chart = chart; 
+			json.title = title;     
+			json.tooltip = tooltip;  
+			json.series = series;
+			json.plotOptions = plotOptions;
+			 $('#campo5').highcharts(json);
+	
+		});	
+}
+	
+	
+
+	
+	
 
 
