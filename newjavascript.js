@@ -6,11 +6,40 @@ var numeroDeObjetos;
 var totalOSTestada= 0;
 var totalOSComDefeito=0;
 total = 0;
+var numeroDeBugEmPrducao=0;
 
 function init(){
     var btn = document.getElementById("gerar");
     btn.onclick = requisitarDadosDoWebService;
-   
+	
+	
+	var taIntroducao = document.getElementById("taIntroducao");
+    taIntroducao.onblur =inserirTextoNoHtmlIntro;
+	var introducao = document.getElementById("introducao");
+	introducao.onclick = inserirTextoNoCampoIntro;
+	
+	var ta1 = document.getElementById("ta1");
+    ta1.onblur =inserirTextoNoHtml1;
+	var td1 = document.getElementById("d1");
+	td1.onclick = inserirTextoNoCampo1;
+	
+	var ta2 = document.getElementById("ta2");
+    ta2.onblur =inserirTextoNoHtml2;
+	var td2 = document.getElementById("d2");
+	td2.onclick = inserirTextoNoCampo2;
+	
+	var ta3 = document.getElementById("ta3");
+    ta3.onblur =inserirTextoNoHtml3;
+	var td3 = document.getElementById("d3");
+	td3.onclick = inserirTextoNoCampo3;
+	
+	var ta4 = document.getElementById("ta4");
+    ta4.onblur =inserirTextoNoHtml4;
+	var td4 = document.getElementById("d4");
+	td4.onclick = inserirTextoNoCampo4;
+	
+	
+	
 }
 
 
@@ -116,6 +145,7 @@ function criarTabela(){
 				
 			}else{
 				var input = document.createElement("input");
+				input.class= 'campoTexto';
 				cell.appendChild(input);
 				linha.appendChild(cell);
 			}
@@ -234,6 +264,7 @@ function porcentagemOcorrência(){
 				vetCont[0]++;		
 			}else if(str.localeCompare("BUG EM PRODUÇÃO")==0){
 				vetCont[1]++;
+				numeroDeBugEmPrducao++;
 			}else if(str.localeCompare("OCORRÊNCIA EM PRODUÇÃO")==0){
 				vetCont[2]++;
 			}else if(str.localeCompare("SOLICITAÇÃO")==0){
@@ -425,6 +456,94 @@ function porcentagemDeOSTestadasComDefeito(){
 }
 	
 	
+
+function inserirTextoNoCampo1(){
+	var text = document.createTextNode(this.value);
+	document.getElementById("ta1").style.display = "block";
+	document.getElementById("d1").innerHTML="";
+}
+
+function inserirTextoNoHtml1(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("ta1").style.display = "none";
+		var d1=document.getElementById("d1");
+		d1.appendChild(text);
+	}
+	
+}
+
+
+function inserirTextoNoCampo2(){
+	var text = document.createTextNode(this.value);
+	document.getElementById("ta2").style.display = "block";
+	document.getElementById("d2").innerHTML="";
+}
+
+function inserirTextoNoHtml2(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("ta2").style.display = "none";
+		var d1=document.getElementById("d2");
+		d1.appendChild(text);
+	}
+	
+}
+
+
+function inserirTextoNoCampo3(){
+	var text = document.createTextNode(this.value);
+	document.getElementById("ta3").style.display = "block";
+	document.getElementById("d3").innerHTML="";
+}
+
+function inserirTextoNoHtml3(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("ta3").style.display = "none";
+		var d1=document.getElementById("d3");
+		d1.appendChild(text);
+	}
+	
+}
+
+
+function inserirTextoNoCampo4(){
+	var text = document.createTextNode(this.value);
+	document.getElementById("ta4").style.display = "block";
+	document.getElementById("d4").innerHTML="";
+}
+
+function inserirTextoNoHtml4(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("ta4").style.display = "none";
+		var d1=document.getElementById("d4");
+		d1.appendChild(text);
+	}
+	
+}
+
+function inserirTextoNoCampoIntro(){
+	var text = document.createTextNode(this.value);
+	document.getElementById("taIntroducao").style.display = "block";
+	document.getElementById("introducao").innerHTML="";
+}
+
+function inserirTextoNoHtmlIntro(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("taIntroducao").style.display = "none";
+		var d1=document.getElementById("introducao");
+		d1.appendChild(text);
+	}
+	
+}
 
 	
 	
