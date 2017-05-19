@@ -12,7 +12,6 @@ function init(){
     var btn = document.getElementById("gerar");
     btn.onclick = requisitarDadosDoWebService;
 	
-	
 	var taIntroducao = document.getElementById("taIntroducao");
     taIntroducao.onblur =inserirTextoNoHtmlIntro;
 	var introducao = document.getElementById("introducao");
@@ -38,8 +37,10 @@ function init(){
 	var td4 = document.getElementById("d4");
 	td4.onclick = inserirTextoNoCampo4;
 	
-	
-	
+	var btnInserirNaTabela =document.getElementById("inserirNaTabela");
+	btnInserirNaTabela.onclick = inserirQuantidadeDeDefeitos;
+	var tabela = document.getElementById("tabela");
+	tabela.onclick = editarQuantidadeDeDefeitos;
 }
 
 
@@ -66,7 +67,7 @@ function criarTabela(){
    
     numeroDeObjetos = Object.keys(objJSON).length;
 	
-    var tabela = document.getElementById("teste");
+    var tabela = document.getElementById("tabela");
 	
 	//limpando a tabela
 	  while (tabela.rows.length > 1)
@@ -145,7 +146,7 @@ function criarTabela(){
 				
 			}else{
 				var input = document.createElement("input");
-				input.class= 'campoTexto';
+				input.className = 'campoTexto';
 				cell.appendChild(input);
 				linha.appendChild(cell);
 			}
@@ -158,8 +159,7 @@ function criarTabela(){
 	   porcentagemOcorrência();
 	   porcentagemDeOSTestadas();
 	   porcentagemDeOSTestadasComDefeito();
-	   alert(totalOSTestada);
-	   alert(totalOSComDefeito);
+	  
 	   
 }
 
@@ -419,7 +419,9 @@ function porcentagemDeOSTestadasComDefeito(){
 				  text: 'Incidência de Defeitos'   
 			   };   
 			   var tooltip = {
-				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+				    followPointer : false,
+					followTouchMove:false,
+				    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
 			   };
 
 			   var plotOptions = {
@@ -456,6 +458,7 @@ function porcentagemDeOSTestadasComDefeito(){
 }
 	
 	
+
 
 function inserirTextoNoCampo1(){
 	var text = document.createTextNode(this.value);
@@ -544,8 +547,35 @@ function inserirTextoNoHtmlIntro(){
 	}
 	
 }
-
 	
 	
+function inserirQuantidadeDeDefeitos(){
+	var input= document.getElementsByClassName("campoTexto");
+	
+	for(var i = 0; i < input.length;i++){
+		var text = document.createTextNode(input[i].value);
+		var pai = input[i].parentElement;
+		input[i].style.display = "none";
+		pai.appendChild(text);
+		document.getElementById("inserirNaTabela").style.display = "none"
+	}
+	document.getElementById("inserirNaTabela").style.display = "none"
+}
 
-
+function editarQuantidadeDeDefeitos(){
+	
+	var input= document.getElementsByClassName("campoTexto");
+	
+	
+	if(input[0].style.display === "none"){
+		for(var i=0;i<input.length;i++){
+			
+			var pai = input[i].parentElement;
+			pai.innerHTML = ""
+			var i = document.createElement("input");
+			i.className = "campoTexto";
+			pai.appendChild(i);
+		}
+		document.getElementById("inserirNaTabela").style.display = "block"
+	}
+}
