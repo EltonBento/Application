@@ -1,20 +1,23 @@
  
+//ao carregar a página chame o método init 
 onload= init;
 
+//variáveis para pegar o retorno do servidor. Tais variaveis guardam os objetos JSON das consultas
 var objJSON;
 var objSetor;
 
+//variáveis globais para facilitar os métodos de terem acesso a elas
 var numeroDeObjetos=0;
 var numeroSetores =0;
 var totalOSTestada= 0;
 var totalOSComDefeito=0;
 total = 0;
 var numeroDeBugEmPrducao=0;
-
 var defeitosEncontrados = 0;
 var defeitosRemovidos = 0;
 
 function init(){
+	//relacionando eventos em botões e campos a métodos.
     var btn = document.getElementById("gerar");
     btn.onclick = requisitarDadosDoWebServiceOS;
 	
@@ -63,7 +66,7 @@ function init(){
 	
 }
 
-
+//requisitando todas as os's da versão e criando a tabela 
 function requisitarDadosDoWebServiceOS(){
 	var httpReq = new XMLHttpRequest();
 	var nVersao = document.getElementById("n1").value;
@@ -83,7 +86,7 @@ function requisitarDadosDoWebServiceOS(){
 	
 }
 
-
+//requisitando todos os setores da versão
 function requisitarDadosDoWebServiceSetor(){
 	var httpReq = new XMLHttpRequest();
 	var nVersao = document.getElementById("n1").value;
@@ -103,7 +106,8 @@ function requisitarDadosDoWebServiceSetor(){
 	
 }
 
-
+//cria tabela e já insere dados relacionado a as pendencias de teste, ajustes de testes, 
+//ajuste de revisão de código e revisão de código
 function criarTabela(){
    
 	
@@ -200,7 +204,7 @@ function criarTabela(){
         tabela.appendChild(linha);
     }
     
-	
+	//chama os outros métodos para gerar os outros gráficos e tabelas 
        porcentagemPrioridade();
 	   porcentagemOcorrência();
 	   porcentagemDeOSTestadas();
@@ -215,7 +219,7 @@ function criarTabela(){
 
 
 function porcentagemPrioridade(){
-	var vetCont = [0,0,0,0];
+	var vetCont = [0,0,0,0];//vetor pra contar quantas vezes cada prioridade aparece na versão
 	
 	
 	for(var i=0;i< numeroDeObjetos;i++){
@@ -231,24 +235,8 @@ function porcentagemPrioridade(){
 			vetCont[3]++;
 		}
 	}	
-	 
-	
-		var campo2 = document.getElementById("campo2");
 		
-		var text = document.createTextNode("total de "+numeroDeObjetos+ " > 100%");
-		//campo2.appendChild(text);
-		for(var j=0;j<4;j++){
-			var p= (vetCont[j]*100)/numeroDeObjetos;
-			
-			switch(j){
-				case 0:text = document.createTextNode("Baixa: "+parseFloat(p.toFixed(2))+ "%");break;
-				case 1:text = document.createTextNode("Média: "+parseFloat(p.toFixed(2))+ "%");break;
-				case 2:text = document.createTextNode("Alta: "+parseFloat(p.toFixed(2))+ "%");break;
-				case 3:text = document.createTextNode("Muito Alta: "+parseFloat(p.toFixed(2))+ "%");
-			}
-			campo2.appendChild(text);
-		}
-		
+		//gerando gráfico
 		$(document).ready(function() {  
 			   var chart = {      
 				  type: 'pie',     
@@ -323,23 +311,7 @@ function porcentagemOcorrência(){
 			}
 	}		
 			
-			var campo3 = document.getElementById("campo3");
-		
-		var text = document.createTextNode("total de "+numeroDeObjetos+ " > 100%");
-		
-		for(var j=0;j<5;j++){
-			var o= (vetCont[j]*100)/numeroDeObjetos;
-			
-			switch(j){
-				case 0:text = document.createTextNode("MELHORIA NO SISTEMA: "+parseFloat(o.toFixed(2))+ "%");break;
-				case 1:text = document.createTextNode("BUG EM PRODUÇÃO: "+parseFloat(o.toFixed(2))+ "%");break;
-				case 2:text = document.createTextNode("OCORRÊNCIA EM PRODUÇÃO: "+parseFloat(o.toFixed(2))+ "%");break;
-				case 3:text = document.createTextNode("SOLICITAÇÃO: "+parseFloat(o.toFixed(2))+ "%");break;
-				case 4:text = document.createTextNode("DATAFIX: "+parseFloat(o.toFixed(2))+ "%");
-			}
-			campo3.appendChild(text);
-		}
-			
+					
 			
 			$(document).ready(function() {  
 			   var chart = {      
@@ -720,6 +692,8 @@ function quantidadeOSPorSetor(){
 }	
 	
 	
+//os métodos de inseri texto no campo e de editar são para inserir texto na página	
+//e alterá-los	
 
 function inserirTextoNoCampo1(){
 	var text = document.createTextNode(this.value);
@@ -852,8 +826,12 @@ function inserirTextoNoHtmlIntro(){
 }
 	
 	
+//Inserir os defeitos encontrados e removidos na tabela gerada dinamicamente	
+//	
 function inserirQuantidadeDeDefeitos(){
 	var input= document.getElementsByClassName("campoTextoDefeitosEncontrados");
+	//zerando a variável  
+	defeitosEncontrados =0;
 	
 	for(var i = 0; i < input.length;i++){
 		defeitosEncontrados = defeitosEncontrados + parseInt(input[i].value);
@@ -882,13 +860,20 @@ function editarQuantidadeDeDefeitos(){
 			pai.appendChild(campo);
 			
 		}
+		//exibindo o botao de novo
 		document.getElementById("inserirNaTabela").style.display = "block";
+		//limpando campos da parte da métrica
+		document.getElementById("TDR").innerHTML="";
+		document.getElementById("TDD").innerHTML="";
+	    document.getElementById("ERD").innerHTML="";
 		editarQuantidadeDeDefeitosRemovidos();
 	}
 }
 
 function inserirQuantidadeDeDefeitosRemovidos(){
 	var input= document.getElementsByClassName("campoTextoDefeitosRemovidos");
+	//zerando a variável
+	defeitosRemovidos=0;
 	
 	for(var i = 0; i < input.length;i++){
 		defeitosRemovidos = defeitosRemovidos+ parseInt(input[i].value);
@@ -921,6 +906,7 @@ function editarQuantidadeDeDefeitosRemovidos(){
 }
 
 
+//Calculo da métrica eficiencia de remoção de defeitos
 
 function erd(){
 	var TDR = document.getElementById("TDR");
@@ -932,6 +918,6 @@ function erd(){
 	text = document.createTextNode(defeitosRemovidos);
 	TDR.appendChild(text);
 	var valor = (defeitosRemovidos/defeitosEncontrados)*100;
-	text = document.createTextNode(valor+"%");
+	text = document.createTextNode(parseFloat(valor).toFixed(2)+"%");
 	ERD.appendChild(text);
 }
