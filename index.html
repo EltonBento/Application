@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Relatório de Testes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="newjavascript.js"></script>
@@ -38,8 +38,8 @@ and open the template in the editor.
         </div>
 		<div id= "conteudo">
 		
-		<div id="introducao"></div>
-		<textarea id ="taIntroducao" value ="" rows="6" cols="100"></textarea>
+			<div id="introducao"></div>
+			<textarea id ="taIntroducao" value ="" rows="6" cols="100"></textarea>
 		
 		
 		
@@ -87,6 +87,23 @@ and open the template in the editor.
 			<div id="campo7"></div>
 			<textarea id ="ta6" rows="6" cols="100"></textarea>
 			<div id="d6"></div>
+			
+			<div id="campo8">
+			<h2>Abertura de OS por Setor</h2>
+				<table id="tabela2">
+				<tr>
+				<th>Setor</th>
+				<th>Quantidade de OS's Abertas</th>
+				</table>
+				
+			</div>
+			
+			<div id="d7">
+				<h2>Eficácia de Remoção de defeitos(ERD)</h2>
+				<p>TDR = Total de Defeitos Removidos: <span id="TDR"></span></p>
+				<p>TDD = Total de Defeitos Detectados pelo teste : <span id="TDD"></span></p>
+				<p>ERD = (TDR / TDD) *100 :  <span id="ERD"></span></p>
+			</div>
 		</div>
 		
     </body>

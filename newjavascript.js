@@ -2,15 +2,21 @@
 onload= init;
 
 var objJSON;
-var numeroDeObjetos;
+var objSetor;
+
+var numeroDeObjetos=0;
+var numeroSetores =0;
 var totalOSTestada= 0;
 var totalOSComDefeito=0;
 total = 0;
 var numeroDeBugEmPrducao=0;
 
+var defeitosEncontrados = 0;
+var defeitosRemovidos = 0;
+
 function init(){
     var btn = document.getElementById("gerar");
-    btn.onclick = requisitarDadosDoWebService;
+    btn.onclick = requisitarDadosDoWebServiceOS;
 	
 	var taIntroducao = document.getElementById("taIntroducao");
     taIntroducao.onblur =inserirTextoNoHtmlIntro;
@@ -58,12 +64,14 @@ function init(){
 }
 
 
-function requisitarDadosDoWebService(){
+function requisitarDadosDoWebServiceOS(){
 	var httpReq = new XMLHttpRequest();
 	var nVersao = document.getElementById("n1").value;
 	httpReq.onreadystatechange = function(){
 		if(httpReq.readyState == 4){
+			requisitarDadosDoWebServiceSetor();
 			objJSON = JSON.parse(httpReq.responseText);
+			numeroDeObjetos = Object.keys(objJSON).length;
 			criarTabela();
 		}
 	};
@@ -76,10 +84,28 @@ function requisitarDadosDoWebService(){
 }
 
 
+function requisitarDadosDoWebServiceSetor(){
+	var httpReq = new XMLHttpRequest();
+	var nVersao = document.getElementById("n1").value;
+	httpReq.onreadystatechange = function(){
+		if(httpReq.readyState == 4){
+			
+			objSetor = JSON.parse(httpReq.responseText);
+			numeroSetores = Object.keys(objSetor).length;
+						
+		}
+	};
+	
+	httpReq.open("GET",	"http://localhost:8080/setor?observacao=V%20"+nVersao,false);
+	httpReq.withCredentials = true;
+	httpReq.send();
+	
+	
+}
+
 
 function criarTabela(){
    
-    numeroDeObjetos = Object.keys(objJSON).length;
 	
     var tabela = document.getElementById("tabela");
 	
@@ -174,12 +200,14 @@ function criarTabela(){
         tabela.appendChild(linha);
     }
     
+	
        porcentagemPrioridade();
 	   porcentagemOcorrência();
 	   porcentagemDeOSTestadas();
 	   porcentagemDeOSTestadasComDefeito();
 	   porcentagemDeTipoManutencao();
 	   quantidadeOcorrenciaTipoManutencao();
+	   quantidadeOSPorSetor();
 	  
 	   
 }
@@ -582,7 +610,7 @@ function quantidadeOcorrenciaTipoManutencao(){
 		   
 		   	   
 		   var xAxis = {
-			  categories: ['INTERNA', 'CUSTUMIZAÇÃO'],
+			  categories: ['Quantidade'],
 			    crosshair: true
 		   };
 		   
@@ -638,6 +666,60 @@ function quantidadeOcorrenciaTipoManutencao(){
 	
 	
 
+
+function quantidadeOSPorSetor(){
+	var lista = new Array(numeroSetores);
+	var cont = new Array(numeroSetores).fill(0);
+	
+	
+	for(var i=0;i<numeroSetores;i++){
+		lista[i]=objSetor[i].setordescricao;
+		
+	}
+	
+	
+	//contando quantas vezes cada setor aparece
+	posicao=0;
+	for(var i=0;i<numeroSetores;i++){
+		
+		for(var j = 0;j<numeroDeObjetos;j++){
+			if(lista[i] == objJSON[j].setor.setordescricao){
+				cont[posicao]++;
+			}
+		}
+		posicao++;
+	}
+	
+	 
+	 
+	var tabela2 = document.getElementById("tabela2");
+	while (tabela2.rows.length > 1){
+		tabela2.deleteRow(tabela2.rows.length - 1);
+	 }
+	 
+	for(var i=0;i<numeroSetores;i++){
+		var linha = document.createElement("tr");
+		for(var j = 0;j< 2; j++){
+			var cell = document.createElement("td");
+			if(j==0){
+				var cellText = document.createTextNode(lista[i]);
+				cell.appendChild(cellText);
+				linha.appendChild(cell);	
+			}else{
+				var cellText = document.createTextNode(cont[i]);
+				cell.appendChild(cellText);
+				linha.appendChild(cell);	
+				
+			}
+		}
+		tabela2.appendChild(linha);
+	
+	}
+    
+     
+}	
+	
+	
 
 function inserirTextoNoCampo1(){
 	var text = document.createTextNode(this.value);
@@ -731,8 +813,6 @@ function inserirTextoNoHtml5(){
 
 
 
-
-
 function inserirTextoNoCampo6(){
 	var text = document.createTextNode(this.value);
 	document.getElementById("ta6").style.display = "block";
@@ -776,6 +856,7 @@ function inserirQuantidadeDeDefeitos(){
 	var input= document.getElementsByClassName("campoTextoDefeitosEncontrados");
 	
 	for(var i = 0; i < input.length;i++){
+		defeitosEncontrados = defeitosEncontrados + parseInt(input[i].value);
 		var text = document.createTextNode(input[i].value);
 		var pai = input[i].parentElement;
 		input[i].style.display = "none";
@@ -784,6 +865,7 @@ function inserirQuantidadeDeDefeitos(){
 	}
 	document.getElementById("inserirNaTabela").style.display = "none";
 	inserirQuantidadeDeDefeitosRemovidos();
+	erd();
 }
 
 function editarQuantidadeDeDefeitos(){
@@ -809,6 +891,7 @@ function inserirQuantidadeDeDefeitosRemovidos(){
 	var input= document.getElementsByClassName("campoTextoDefeitosRemovidos");
 	
 	for(var i = 0; i < input.length;i++){
+		defeitosRemovidos = defeitosRemovidos+ parseInt(input[i].value);
 		var text = document.createTextNode(input[i].value);
 		var pai = input[i].parentElement;
 		input[i].style.display = "none";
@@ -835,4 +918,20 @@ function editarQuantidadeDeDefeitosRemovidos(){
 		}
 			
 	}
+}
+
+
+
+function erd(){
+	var TDR = document.getElementById("TDR");
+	var TDD = document.getElementById("TDD");
+	var ERD = document.getElementById("ERD");
+	
+	var text = document.createTextNode(defeitosEncontrados);
+	TDD.appendChild(text);
+	text = document.createTextNode(defeitosRemovidos);
+	TDR.appendChild(text);
+	var valor = (defeitosRemovidos/defeitosEncontrados)*100;
+	text = document.createTextNode(valor+"%");
+	ERD.appendChild(text);
 }
