@@ -112,6 +112,7 @@ function criarTabela(){
    
 	
     var tabela = document.getElementById("tabela");
+	totalOSTestada = 0;
 	
 	//limpando a tabela
 	  while (tabela.rows.length > 1)
@@ -247,7 +248,7 @@ function porcentagemPrioridade(){
 				  }
 			   };
 			   var title = {
-				  text: 'Abertura de Ordem de Serviço pela Prioridade'   
+				  text: ''   
 			   };   
 			   var tooltip = {
 				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -255,13 +256,12 @@ function porcentagemPrioridade(){
 
 			   var plotOptions = {
 				  pie: {
-					  allowPointSelect: true,
-					  cursor: 'pointer',
-					  depth: 35,
-					  dataLabels: {
-						 enabled: true,
-						 format: '{point.name}'
-					  }
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: false           
+							},
+					showInLegend: true
 				  }
 			   };   
 			   var series= [{
@@ -297,12 +297,12 @@ function porcentagemOcorrência(){
 	for(var i=0;i< numeroDeObjetos;i++){
 		var str = objJSON[i].ocorrencias[0].descricao;
 	
-		if(str.localeCompare("MELHORIA NO SISTEMA")==0){
+		if(str.localeCompare("MELHORIA")==0){
 				vetCont[0]++;		
-			}else if(str.localeCompare("BUG EM PRODUÇÃO")==0){
+			}else if(str.localeCompare("BUG")==0){
 				vetCont[1]++;
 				numeroDeBugEmPrducao++;
-			}else if(str.localeCompare("OCORRÊNCIA EM PRODUÇÃO")==0){
+			}else if(str.localeCompare("OCORRÊNCIA")==0){
 				vetCont[2]++;
 			}else if(str.localeCompare("SOLICITAÇÃO")==0){
 				vetCont[3]++;
@@ -323,7 +323,7 @@ function porcentagemOcorrência(){
 				  }
 			   };
 			   var title = {
-				  text: 'Abertura de Ordem de Serviço pelo tipo de Ocorrência'   
+				  text: ''   
 			   };   
 			   var tooltip = {
 				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -331,22 +331,21 @@ function porcentagemOcorrência(){
 
 			   var plotOptions = {
 				  pie: {
-					  allowPointSelect: true,
-					  cursor: 'pointer',
-					  depth: 35,
-					  dataLabels: {
-						 enabled: true,
-						 format: '{point.name}'
-					  }
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: false           
+							},
+					showInLegend: true
 				  }
 			   };   
 			   var series= [{
 					 type: 'pie',
 						name: 'Ocorrência com',
 						data: [
-							['MELHORIA NO SISTEMA',  parseFloat(((vetCont[0]*100)/numeroDeObjetos).toFixed(2))],
-							['BUG EM PRODUÇÃO',    parseFloat(((vetCont[1]*100)/numeroDeObjetos).toFixed(2))  ],
-							['OCORRÊNCIA EM PRODUÇÃO', parseFloat(((vetCont[2]*100)/numeroDeObjetos).toFixed(2)) ],
+							['MELHORIA',  parseFloat(((vetCont[0]*100)/numeroDeObjetos).toFixed(2))],
+							['BUG',    parseFloat(((vetCont[1]*100)/numeroDeObjetos).toFixed(2))  ],
+							['OCORRÊNCIA', parseFloat(((vetCont[2]*100)/numeroDeObjetos).toFixed(2)) ],
 							['SOLICITAÇÃO',   parseFloat(((vetCont[3]*100)/numeroDeObjetos).toFixed(2)) ],
 							['DATAFIX',   parseFloat(((vetCont[4]*100)/numeroDeObjetos).toFixed(2))],
 						]
@@ -382,29 +381,28 @@ function porcentagemDeOSTestadas(){
 				  }
 			   };
 			   var title = {
-				  text: 'Ordem de Serviços Testadas'   
+				  text: ''   
 			   };   
 			   var tooltip = {
 				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
 			   };
 
 			   var plotOptions = {
-				  pie: {
-					  allowPointSelect: true,
-					  cursor: 'pointer',
-					  depth: 35,
-					  dataLabels: {
-						 enabled: true,
-						 format: '{point.name}'
-					  }
+				 pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: false           
+							},
+					showInLegend: true
 				  }
 			   };   
 			   var series= [{
 					 type: 'pie',
 						name: 'com',
 						data: [
-							['ORDENS DE SERVIÇO TESTADAS',  parseFloat(((totalOSTestada*100)/numeroDeObjetos).toFixed(2))],
-							['ORDENS DE SERVIÇO NÃO TESTADAS',  parseFloat(((totalOSNaoTestada*100)/numeroDeObjetos).toFixed(2))  ],
+							['OS TESTADAS',  parseFloat(((totalOSTestada*100)/numeroDeObjetos).toFixed(2))],
+							['OS NÃO TESTADAS',  parseFloat(((totalOSNaoTestada*100)/numeroDeObjetos).toFixed(2))  ],
 							
 						]
 			   }];     
@@ -437,7 +435,7 @@ function porcentagemDeOSTestadasComDefeito(){
 				  }
 			   };
 			   var title = {
-				  text: 'Incidência de Defeitos'   
+				  text: ''   
 			   };   
 			   var tooltip = {
 				    followPointer : false,
@@ -447,21 +445,20 @@ function porcentagemDeOSTestadasComDefeito(){
 
 			   var plotOptions = {
 				  pie: {
-					  allowPointSelect: true,
-					  cursor: 'pointer',
-					  depth: 35,
-					  dataLabels: {
-						 enabled: true,
-						 format: '{point.name}'
-					  }
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: false           
+							},
+					showInLegend: true
 				  }
 			   };   
 			   var series= [{
 					 type: 'pie',
 						name: 'com',
 						data: [
-							['COM INCIDÊNCIA DE DEFEITOS',  parseFloat(((totalOSComDefeito*100)/numeroDeObjetos).toFixed(2))],
-							['SEM INCIDÊNCIA DE DEFEITOS',  parseFloat(((totalOSSemDefeito*100)/numeroDeObjetos).toFixed(2))  ],
+							['COM DEFEITOS',  parseFloat(((totalOSComDefeito*100)/numeroDeObjetos).toFixed(2))],
+							['SEM DEFEITOS',  parseFloat(((totalOSSemDefeito*100)/numeroDeObjetos).toFixed(2))  ],
 							
 						]
 			   }];     
@@ -486,7 +483,7 @@ function porcentagemDeTipoManutencao(){
 	for(var i=0;i< numeroDeObjetos;i++){
 		var str = objJSON[i].tipoManutencao.descricao;
 	
-		if(str.localeCompare("CUSTUMIZAÇÃO")==0){
+		if(str.localeCompare("CUSTOMIZAÇÃO")==0){
 				vetCont[0]++;		
 		}else if(str.localeCompare("INTERNA")==0){
 				vetCont[1]++;				
@@ -508,7 +505,7 @@ function porcentagemDeTipoManutencao(){
 				  }
 			   };
 			   var title = {
-				  text: 'Abertura de Ordem de Serviço pelo tipo de Manutenção'   
+				  text: ''   
 			   };   
 			   var tooltip = {
 				  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -516,20 +513,19 @@ function porcentagemDeTipoManutencao(){
 
 			   var plotOptions = {
 				  pie: {
-					  allowPointSelect: true,
-					  cursor: 'pointer',
-					  depth: 35,
-					  dataLabels: {
-						 enabled: true,
-						 format: '{point.name}'
-					  }
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: false           
+							},
+					showInLegend: true
 				  }
 			   };   
 			   var series= [{
 					 type: 'pie',
 						name: 'com',
 						data: [
-							['CUSTUMIZAÇÃO',  parseFloat(((vetCont[0]*100)/numeroDeObjetos).toFixed(2))],
+							['CUSTOMIZAÇÃO',  parseFloat(((vetCont[0]*100)/numeroDeObjetos).toFixed(2))],
 							['INTERNA',    parseFloat(((vetCont[1]*100)/numeroDeObjetos).toFixed(2))  ],
 							['DÚVIDAS', parseFloat(((vetCont[2]*100)/numeroDeObjetos).toFixed(2)) ],
 							['PROBLEMAS',   parseFloat(((vetCont[3]*100)/numeroDeObjetos).toFixed(2)) ],
@@ -554,7 +550,7 @@ function porcentagemDeTipoManutencao(){
 	
 function quantidadeOcorrenciaTipoManutencao(){
 	var interna = 0;
-	var costumizacao = 0;
+	var costomizacao = 0;
 	
 	for(var i=0; i<objJSON.length;i++){
 		var strO = objJSON[i].ocorrencias[0].descricao;
@@ -564,8 +560,8 @@ function quantidadeOcorrenciaTipoManutencao(){
 			if(strTM.localeCompare("INTERNA")==0){
 				interna++;
 			}
-			if(strTM.localeCompare("CUSTUMIZAÇÃO")==0){
-				costumizacao++;
+			if(strTM.localeCompare("CUSTOMIZAÇÃO")==0){
+				costomizacao++;
 			}	
 		}
 	}
@@ -577,7 +573,7 @@ function quantidadeOcorrenciaTipoManutencao(){
 		   };		   
 		   
 		   var title = {
-			  text: 'Quantidade Solicitação abertas pelo tipo de Manutenção'   
+			  text: ''   
 		   };
 		   
 		   	   
@@ -614,8 +610,8 @@ function quantidadeOcorrenciaTipoManutencao(){
 				 data: [interna]
 			  }, 
 			  {
-				 name: 'CUSTUMIZAÇÃO',
-				 data: [costumizacao]
+				 name: 'CUSTOMIZAÇÃO',
+				 data: [costomizacao]
 			  }, 
 			  
 	];
@@ -794,12 +790,23 @@ function inserirTextoNoCampo6(){
 	
 }
 
-
 function inserirTextoNoHtml6(){
 	if(this.value != ""){
 		 var text = document.createTextNode(this.value);
 		document.getElementById("ta6").style.display = "none";
 		var d1=document.getElementById("d6");
+		d1.appendChild(text);
+	}
+	
+}
+
+
+function inserirTextoNoHtmlTotalOS(){
+	
+	if(this.value != ""){
+		 var text = document.createTextNode(this.value);
+		document.getElementById("ta1").style.display = "none";
+		var d1=document.getElementById("d1");
 		d1.appendChild(text);
 	}
 	
@@ -920,4 +927,19 @@ function erd(){
 	var valor = (defeitosRemovidos/defeitosEncontrados)*100;
 	text = document.createTextNode(parseFloat(valor).toFixed(2)+"%");
 	ERD.appendChild(text);
+	
+	
+	var osv = document.getElementById("osv");
+	osv.innerHTML = numeroDeObjetos;
+	
+	var ost = document.getElementById("ost");
+	ost.innerHTML = totalOSTestada;
+	
+	var dd = document.getElementById("dd");
+	dd.innerHTML = defeitosEncontrados;
+	
+	var dr = document.getElementById("dr");
+	dr.innerHTML = defeitosRemovidos;
 }
+
+
