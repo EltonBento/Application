@@ -5,19 +5,25 @@ onload= init;
 //variáveis para pegar o retorno do servidor. Tais variaveis guardam os objetos JSON das consultas
 var objJSON;
 var objSetor;
+var objVersao;
 
 //variáveis globais para facilitar os métodos de terem acesso a elas
 var numeroDeObjetos=0;
 var numeroSetores =0;
+var numItensVersao =0;
+
 var totalOSTestada= 0;
 var totalOSComDefeito=0;
-total = 0;
+var total = 0;
 var numeroDeBugEmPrducao=0;
 var defeitosEncontrados = 0;
 var defeitosRemovidos = 0;
 
 function init(){
 	//relacionando eventos em botões e campos a métodos.
+	requisitarListaDeVersao();
+	preencherDropDown();	
+	
     var btn = document.getElementById("gerar");
     btn.onclick = requisitarDadosDoWebServiceOS;
 	
@@ -69,7 +75,7 @@ function init(){
 //requisitando todas as os's da versão e criando a tabela 
 function requisitarDadosDoWebServiceOS(){
 	var httpReq = new XMLHttpRequest();
-	var nVersao = document.getElementById("n1").value;
+	var nVersao = document.getElementById("versao").value;
 	httpReq.onreadystatechange = function(){
 		if(httpReq.readyState == 4){
 			requisitarDadosDoWebServiceSetor();
@@ -79,7 +85,7 @@ function requisitarDadosDoWebServiceOS(){
 		}
 	};
 	
-	httpReq.open("GET",	"http://localhost:8080/findByObservacaoVersao?observacao=V%20"+nVersao,true);
+	httpReq.open("GET",	"http://localhost:8080/findByObservacaoVersao?observacao="+nVersao,true);
 	httpReq.withCredentials = true;
 	httpReq.send();
 	
@@ -89,7 +95,8 @@ function requisitarDadosDoWebServiceOS(){
 //requisitando todos os setores da versão
 function requisitarDadosDoWebServiceSetor(){
 	var httpReq = new XMLHttpRequest();
-	var nVersao = document.getElementById("n1").value;
+	var nVersao = document.getElementById("versao").value;
+	
 	httpReq.onreadystatechange = function(){
 		if(httpReq.readyState == 4){
 			
@@ -99,9 +106,40 @@ function requisitarDadosDoWebServiceSetor(){
 		}
 	};
 	
-	httpReq.open("GET",	"http://localhost:8080/setor?observacao=V%20"+nVersao,false);
+	httpReq.open("GET",	"http://localhost:8080/setor?observacao="+nVersao,false);
 	httpReq.withCredentials = true;
 	httpReq.send();
+}
+
+function requisitarListaDeVersao(){
+	var httpReq = new XMLHttpRequest();
+	httpReq.onreadystatechange = function(){
+		if(httpReq.readyState == 4){
+			objVersao = JSON.parse(httpReq.responseText);
+			numItensVersao = Object.keys(objVersao).length;
+		}
+	};
+	
+	httpReq.open("GET",	"http://localhost:8080/versao",false);
+	httpReq.withCredentials = true;
+	httpReq.send();
+	
+}
+
+
+function preencherDropDown(){
+	
+	
+	var dropdown = document.getElementById("versao");
+	
+	for(var i = 0; i < numItensVersao; i++){
+		var opcao =document.createElement("option");
+		opcao.value = objVersao[i];
+		opcao.innerHTML = objVersao[i];
+		dropdown.appendChild(opcao);
+	}
+	
+	
 	
 	
 }
