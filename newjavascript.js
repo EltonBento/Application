@@ -85,7 +85,7 @@ function requisitarDadosDoWebServiceOS(){
 		}
 	};
 	
-	httpReq.open("GET",	"http://localhost:8080/findByObservacaoVersao?observacao="+nVersao,true);
+	httpReq.open("GET",	"http://localhost:8080/findOSByVersao?observacao="+nVersao,true);
 	httpReq.withCredentials = true;
 	httpReq.send();
 	
@@ -106,7 +106,7 @@ function requisitarDadosDoWebServiceSetor(){
 		}
 	};
 	
-	httpReq.open("GET",	"http://localhost:8080/setor?observacao="+nVersao,false);
+	httpReq.open("GET",	"http://localhost:8080/findSetorByVersao?observacao="+nVersao,false);
 	httpReq.withCredentials = true;
 	httpReq.send();
 }
@@ -960,11 +960,17 @@ function erd(){
 	
 	var text = document.createTextNode(defeitosEncontrados);
 	TDD.appendChild(text);
+	TDD.style.fontWeight="bold";
+	
 	text = document.createTextNode(defeitosRemovidos);
 	TDR.appendChild(text);
+	TDR.style.fontWeight="bold";
+	
 	var valor = (defeitosRemovidos/defeitosEncontrados)*100;
 	text = document.createTextNode(parseFloat(valor).toFixed(2)+"%");
 	ERD.appendChild(text);
+	ERD.style.fontWeight="bold";
+	
 	
 	
 	var osv = document.getElementById("osv");
